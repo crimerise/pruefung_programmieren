@@ -1,0 +1,5 @@
+Aufgaben:
+- cmd.exe
+- Json
+- Klassen
+- 
