@@ -6,13 +6,15 @@
 
 //Hilfetext
 const char * const HELPTXT = {
-    "Usage: options [OPTIONS] file ...\n" \
+    "Usage: This program can convert your Json file to ...\n" \
     "-h, --help             Display this information\n" \
     "    --debug            Enable debug mode\n" \
     "-o <file>              Named output of these programm\n" \
     "-v, --version          Display Programm Information\n" \
+    "-a, --verbose          Display what is happening\n" \
     "\n" \
-    "For more information contact thomas_staudacher@yahoo.de"
+    "Our Team: Elias, Philipp, Leo\n" \
+    "Constact: info@threemantec.de"
 };
 
 //Parameter die gesetzt werden
@@ -26,6 +28,11 @@ const struct option longopts[] =
     {"version",no_argument,NULL,'v'},
     {0,0,0,0}
 };
+
+static void verbose()
+{
+    puts("das geht gerade ab:");
+}
 
 static void Help()
 {
@@ -65,6 +72,9 @@ int main(int argc, char* argv[])
                 break;
             case 'v':
                 Version();
+                break;
+            case 'a':
+                verbose();
                 break;
             default:
                 fprintf(stderr,"Unknown option %d", c);
