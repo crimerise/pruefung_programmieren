@@ -42,10 +42,11 @@ const char * const HELPTXT = {
     "For more Information contact elias.fahresnchon@threemantec.de or info@threemantec.de\n"
 };
 
+static int debug = {0};
 const struct option longopts[] =
 {
     //Mit der Nummer 1 wird das setzen des Flags gesteuert
-//    {"debug",no_argument,&debug,1},
+    {"debug",no_argument,&debug,'1'},
     {"help",no_argument,NULL,'h'},
     {"version",no_argument,NULL,'v'},
     {0,0,0,0}
@@ -90,6 +91,10 @@ int main(int argc, char *argv[]) {
                 break;
             case 'v':
                 Version();
+                break;
+            case '1':
+                std::cout << "Debugging mode on"<< std::endl;
+                debug=true;
                 break;
             default:
                 fprintf(stderr,"Unknown option %d", c);
