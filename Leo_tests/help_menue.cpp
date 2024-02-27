@@ -1,3 +1,5 @@
+//Bearbeitung: Leo Geiger TIM23
+
 #include <getopt.h>
 #include <iostream>
 #include <cstdlib>
