@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
         return 0;
     }
     else
-        while((c = getopt_long(argc, argv, "ho:v", longopts, &optindex)) >= 0)
+        while((c = getopt_long(argc, argv, "ho:va", longopts, &optindex)) >= 0)
         {
             switch(c)
             {
