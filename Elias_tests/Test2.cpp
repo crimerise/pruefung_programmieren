@@ -39,7 +39,8 @@ const char * const HELPTXT = {
     "-h --help          displays this Help Text\n"
     "  --debug          Displays Debug Logs\n"
     "-v --Version       Displays the Version of the Programm\n"
-    "For more Information contact elias.fahresnchon@threemantec.de or info@threemantec.de\n"
+    "For more Information contact us individualy or via our info Email:\n"
+    "Emails:  elias.fahrenschon@threemantec.de\nleo\nphillip\ninfo@threemantect.de"
 };
 
 static int debug = {0};
