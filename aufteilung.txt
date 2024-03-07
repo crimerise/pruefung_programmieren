@@ -1,5 +1,6 @@
 Aufgaben:
-- cmd.exe
-- Json
-- Klassen
-- 
+-Verarbeitung der JSON-Einträge: Implementiere die Logik, um die spezifizierten Einstellungen, Umgebungsvariablen, Pfade und auszuführende Befehle aus der JSON-Datei zu verarbeiten.
+-Erstellung der Batch-Datei: Entwickle die Funktionalität, um basierend auf den verarbeiteten Daten eine Batch-Datei zu generieren, die die spezifizierten Einstellungen anwendet, Umgebungsvariablen setzt, Pfade hinzufügt und gegebenenfalls Anwendungen startet.
+-Fehlerbehandlung: Implementiere eine robuste Fehlerbehandlung für den Fall, dass die JSON-Datei nicht den erwarteten Aufbau hat oder spezifizierte Dateipfade nicht existieren.
+-Kommandozeilenoptionen erweitern: Erweitere die Kommandozeilenoptionen deines Programms um weitere nützliche Funktionen, wie z.B. die Möglichkeit, mehrere JSON-Dateien in einem Durchlauf zu verarbeiten oder detailliertere Hilfe- und Fehlermeldungen auszugeben.
+-Testen: Beginne mit dem Testen deines Programms, um sicherzustellen, dass es korrekt funktioniert. Berücksichtige dabei unterschiedliche Szenarien und Eingabedaten.
