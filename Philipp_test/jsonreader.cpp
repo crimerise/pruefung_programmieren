@@ -1,3 +1,5 @@
+Changed jsonreader.cpp by PhiProjekt
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -11,32 +13,113 @@ struct JSON {
 };
 
 int main() {
-    // Benutzereingabe für den Dateipfad
-    std::cout << "Bitte gib den Dateipfad zur Datei an:\t";
-    std::string filePath;
-    std::cin >> filePath;
+    #include <config.h>
+#include <pathtest.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
 
-    // JSON-Datei einlesen
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
-        std::cerr << "Fehler beim Öffnen der Datei." << std::endl;
-        return 1;
+#include <jsoncpp/json/json.h>
+
+#include <boost/filesystem.hpp>
+namespace fs = boost::filesystem;
+
+#include <boost/format.hpp>
+
+//Das sind die Logging spezifischen Includes
+//Erster Teil wird nur zum initalisieren benötigt
+#include <filesink.h>
+#include <consolesink.h>
+
+//In jeder Datei in der Logging statt findet müssen diese zwei Zeilen includiert werden
+#include <logging.h>
+LOGGING_INSTANCE();
+
+/**
+ * @brief Die Einstiegsfunktion in das Programm
+ * 
+ * @param argc Anzahl der Argumente
+ * @param argv Argumente als String
+ * @return <c>0</c> bei Erfolg, sonst <c>!0</c>
+ */
+int main(const int argc, const char **argv) {
+
+    auto textlogsink = boost::make_shared<CFileSink>("Textlog", str(boost::format("%s.log") % MAIN_PROJECTNAME));
+    auto consolelogsink = boost::make_shared<CConsoleSink>("Consolelog");
+
+    {
+        //Registrierung im Logging System
+        CLoggingHelper::connect(textlogsink, [&textlogsink]()->bool {
+            boost::shared_ptr<logging::core> core = CLoggingHelper::getCore();
+
+            core->add_sink(textlogsink);
+            return true;
+        });
+
+        CLoggingHelper::connect(consolelogsink, [&consolelogsink]()->bool {
+            boost::shared_ptr<logging::core> core = CLoggingHelper::getCore();
+
+            core->add_sink(consolelogsink);
+            return true;
+        });
     }
 
-    // Vektor zum Speichern der JSON-Daten
-    std::vector<JSON> jsonData;
+    //Hier kann der Log Level eingestellt werden
+    textlogsink->setCurrentLoggerLevel(ELoggerLevel::DEBUG);
 
-    // Zeile für Zeile einlesen und parsen
-    std::string line;
-    while (std::getline(file, line)) {
-        // Hier implementieren Sie Ihre Logik zum Parsen der JSON-Datei
-        // Die Logik hängt von der genauen Struktur Ihrer JSON-Datei ab
-        // Sie können z. B. reguläre Ausdrücke oder andere Methoden verwenden
-        // um die Daten zu extrahieren und in die jsonData-Struktur einzufügen
+    auto success = [&textlogsink, &consolelogsink]()-> bool {
+        LOG(ELoggerLevel::INFO) << "Programm erfolgreich beendet";
+        CLoggingHelper::disconnect();
+        return EXIT_SUCCESS;
+    };
+
+    auto failure = [&textlogsink, &consolelogsink]()-> bool {
+        LOG(ELoggerLevel::INFO) << "Programm mit Fehler beendet";
+        CLoggingHelper::disconnect();
+        return EXIT_FAILURE;
+    };
+
+    LOG(ELoggerLevel::INFO) << "Programm Start";
+
+    //Simples Beispiel zum auslesen einer json Datei
+    if(argc != 2) {
+        LOG(ELoggerLevel::CONSOLEERROR) << "Bitte eine Datei angeben!";
+        return failure();
     }
+    else {
+        auto path = fs::weakly_canonical(argv[1]);
 
-    // Jetzt sind die JSON-Daten in der Variable "jsonData" gespeichert
-    // Sie können die Daten weiterverarbeiten, wie Sie möchten
+        if(!fs::exists(path)) {
+            LOG(ELoggerLevel::CONSOLEERROR) << "Datei existiert nicht: " << formatValueForLogging(path.string());
+            return failure();
+        }
 
-    return 0;
+        ifstream ifs(path.string());
+
+        Json::Reader reader;
+        Json::Value root;
+        if(!reader.parse(ifs, root)) {
+            LOG(ELoggerLevel::CONSOLEERROR) << "Datei ist ungueltig: " << formatValueForLogging(path.string());
+            return failure();
+        }
+
+        //Zuerst wird das Land ausgeben
+        cout << "Land: " << root["country"].asString() << endl;
+
+        {
+            //Werte aus dem Array
+            const Json::Value persons = root["persons"];
+
+            if(persons.isArray())
+                for (Json::Value::ArrayIndex i = 0; i < persons.size(); ++i) {
+                    auto person = persons[i];
+
+                    cout << "Id: " << person["id"].asInt() << endl;
+                    //..... usw .....
+                }
+        }
+
+        return success();
+    }
 }
