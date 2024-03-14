@@ -1,3 +1,19 @@
-{
-
-}
+[
+    {
+      "name": "John Doe",
+      "age": 30,
+      "email": "john.doe@example.com",
+      "is_active": true,
+      "balance": 1000.50,
+      "skills": ["Java", "C++", "Python"]
+    },
+    {
+      "name": "Jane Smith",
+      "age": 25,
+      "email": "jane.smith@example.com",
+      "is_active": false,
+      "balance": 1500.75,
+      "skills": ["JavaScript", "HTML", "CSS"]
+    }
+  ]
+  
